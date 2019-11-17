@@ -1,0 +1,137 @@
+{% extends 'goodsinfo/base.html' %}
+
+{% block js %}
+    <script src="/static/js/jquery-1.12.4.min.js"></script>
+{#    <script src="/static/js/mytoken.js"></script>#}
+    <script src="/static/js/count.js"></script>
+    <script src="/static/js/jquery.cookie.js"></script>
+    {% comment %}
+    <script>
+    $(function () {
+       $('.add').click(function () {
+           $count = $('.num_show');
+           $count.val(parseInt($count.val()) + 1);
+           $count.blur();
+       });
+       $('.minus').click(function () {
+           $count = $('.num_show');
+           if($count.val() <= 1){
+               $count.val(1)
+           }else{
+               $count.val(parseInt($count.val()) - 1);
+           }
+           $count.blur();
+       });
+       $('.num_show').blur(function () {
+           num = parseInt($(this).val());
+           $(this).val(num);
+           price = $('.gprice').text();
+           $('.totalPrice').text((num * parseFloat(price)).toFixed(2) + '元');
+       })
+    });
+    </script>
+    {% endcomment %}
+{% endblock %}
+
+{% block list_detail1 %}
+<div class="goods_detail_con clearfix">
+    <div class="goods_detail_pic fl"><img src="/static/media/{{ goodobj.gpic }}"></div>
+
+    <div class="goods_detail_list fr">
+        <h3>{{ goodobj.gtitle }}</h3>
+        <p>{{ goodobj.gbrief }}</p>
+        <div class="prize_bar">
+            <span class="show_pirze">¥<em class="gprice">{{ goodobj.gprice }}</em></span>
+            <span class="show_unit">单  位：{{ goodobj.gunit }}</span>
+        </div>
+        <div class="goods_num clearfix">
+            <div class="num_name fl">数 量：</div>
+            <div class="num_add fl">
+                <input type="text" class="num_show fl" value="1">
+                <a href="javascript:;" class="add fr">+</a>
+                <a href="javascript:;" class="minus fr">-</a>
+            </div>
+            <div class="stock fl">库 存：</div>
+            <div class="add_stock fl">
+                <input type="text" class="stock_show fl" value="{{ goodobj.gstock }}" disabled>
+            </div>
+        </div>
+        <div class="total">总价：<em class="totalPrice">{{ goodobj.gprice }}元</em></div>
+        <div class="operate_btn">
+            <a href="javascript:;" class="buy_btn">立即购买</a>
+            <a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+    {% block list_detail2 %}
+    <div class="r_wrap fr clearfix">
+        <ul class="detail_tab clearfix">
+            <li class="active">商品详情</li>
+            <li>评论</li>
+        </ul>
+
+        <div class="tab_content">
+            <dl>
+                {# <dt>商品详情：</dt> #}
+                <dd>{{ goodobj.gcontent }} </dd>
+            </dl>
+        </div>
+
+    </div>
+    {% endblock %}
+
+{% block js2 %}
+
+<!--小动画-->
+<div class="add_jump"></div>
+
+<script type="text/javascript">
+    // 找到加入购物车按钮的坐标位置
+    var $add_x = $('#add_cart').offset().top;
+    var $add_y = $('#add_cart').offset().left;
+
+    // 我的购物车按钮的坐标位置
+    var $to_x = $('#show_count').offset().top;
+    var $to_y = $('#show_count').offset().left;
+
+    var cur_url = '{{ request.path_info }}';
+    // document.cookie="url='/detail_1/';path=/detail_1/";
+    $('#add_cart, .buy_btn').click(function(){
+        // 判断用户是否已经登录
+        login_index = $('.login_btn').text().indexOf('登录');
+        // console.log(login_index);
+        if(login_index >= 0){
+            alert('请先登录后再点击加入购物车');
+            location.href = '{% url 'user:login' %}?next={{ request.path_info }}';
+            return;
+        }
+        if($(this)[0].className == 'buy_btn'){
+            update_cart($('.num_show'));
+            location.href = '{% url 'cart:cart' %}';
+            return false;
+        }
+
+        // 显示小动画位置
+        var $add_jump = $(".add_jump");
+        $add_jump.css({'left':$add_y+80,'top':$add_x+10,'display':'block'});
+
+        $add_jump.stop().animate({
+            'left': $to_y+7,
+            'top': $to_x+7},
+            "fast", function() {
+                $(".add_jump").fadeOut('fast',function(){
+                    var $num = $('.num_show');
+                    update_cart($num);
+                });
+        });
+    });
+    function update_cart($num){
+        var add_count = $num.val(); // 刚刚加入购物车的该商品数量
+        $.get('/cart/add_{{ goodobj.id }}_'+add_count+'/', function (data) {
+            $('#show_count').text(data.count);
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,4 @@
+{{ object.gtitle }}
+{{ object.gbrief }}
+{{ object.gcontent }}
+{{ object.gtype }}

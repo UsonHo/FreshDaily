@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>天天生鲜-{{ title }}</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    {% block css %}{% endblock %}
+    {% block js %}{% endblock %}
+    <script src="/static/js/logout.js"></script>
+</head>
+<body>
+    {% include 'include/public.html' %}
+
+    {#  首页、详情页标准  #}
+	<div class="search_bar clearfix">
+		<a href="/" class="logo fl"><img src="/static/images/logo.png"></a>
+
+    {#  订单页标准  #}
+    {% if page_name == 1 %}
+        <div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;{{ page_char }}</div>
+		<div class="search_con fr">
+            <form method='get' action="/search/">
+                <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+                <input type="submit" class="input_btn fr" value="搜索">
+            </form>
+		</div>
+    {% endif %}
+
+    {#  首页、详情页、列表页标准  #}
+    {% if guest_cart == 1 %}
+		<div class="search_con fl">
+            <form method='get' action="/search/">
+                <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+                <input type="submit" class="input_btn fr" value="搜索">
+            </form>
+		</div>
+		<div class="guest_cart fr">
+			<a href="/cart/" class="cart_name fl">我的购物车</a>
+			<div class="goods_count fl" id="show_count">{{ countobjs|length }}</div>
+		</div>
+    {% endif %}
+
+	</div>
+
+    {# 首页标准 #}
+    {% if index_clasify == 1 %}
+	<div class="navbar_con">
+		<div class="navbar">
+			<h1 class="fl">全部商品分类</h1>
+			<ul class="navlist fl">
+				<li><a href="/">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="http://www.cohui.top/api/python/fore_end/web_static/web-fluid-rem/main-fluid-all.html">流体布局</a></li>
+				<li class="interval">|</li>
+				<li><a href="http://www.cohui.top/api/python/fore_end/web_static/web-fluid-rem/rem.html">Rem布局</a></li>
+                <li class="interval">|</li>
+				<li><a href="http://www.cohui.top/api/python/fore_end/web_static/web_bootstrap_topic.html">响应式布局</a></li>
+				<li class="interval">|</li>
+                <li><a href="http://www.cohui.top/api/python/fore_end/web_static/H5_page/index.html">手机版整屏滚动</a></li>
+                <li class="interval">|</li>
+                <li><a href="http://www.cohui.top/api/python/fore_end/full_screen_scroll.html">电脑版整屏滚动</a></li>
+			</ul>
+		</div>
+	</div>
+    {% endif %}
+
+    {# 订单页、详情页、列表页标准 #}
+    {% if extend_clasify == 1 %}
+    <div class="navbar_con">
+		<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>全部商品分类</h1>
+				<span></span>
+				<ul class="subnav">
+					<li><a href="/list1_1_1" class="fruit">新鲜水果</a></li>
+					<li><a href="/list2_1_1" class="seafood">海鲜水产</a></li>
+					<li><a href="/list3_1_1" class="meet">猪牛羊肉</a></li>
+					<li><a href="/list4_1_1" class="egg">禽类蛋品</a></li>
+					<li><a href="/list5_1_1" class="vegetables">新鲜蔬菜</a></li>
+					<li><a href="/list6_1_1" class="ice">速冻食品</a></li>
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="/">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="http://www.cohui.top/api/python/fore_end/web_static/web-fluid-rem/main-fluid-all.html">流体布局</a></li>
+				<li class="interval">|</li>
+				<li><a href="http://www.cohui.top/api/python/fore_end/web_static/web-fluid-rem/rem.html">Rem布局</a></li>
+                <li class="interval">|</li>
+				<li><a href="http://www.cohui.top/api/python/fore_end/web_static/web_bootstrap_topic.html">响应式布局</a></li>
+				<li class="interval">|</li>
+                <li><a href="http://www.cohui.top/api/python/fore_end/web_static/H5_page/index.html">手机版整屏滚动</a></li>
+                <li class="interval">|</li>
+                <li><a href="http://www.cohui.top/api/python/fore_end/full_screen_scroll.html">电脑版整屏滚动</a></li>
+			</ul>
+		</div>
+	</div>
+    {% endif %}
+
+    {# 面包屑导航 #}
+    {% if extend_bread == 1 %}
+    <div class="breadcrumb">
+		全部分类
+		<span>></span>
+        {% if tid|default:'' != '' %}
+		<a href="/list{{ tid }}_1_1/">{{ newgoods.0.gtype.ttitle }}</a>
+        {% endif %}
+        {% if detail_bread == 1 %}
+        <a href="/list{{ goodobj.gtype_id }}_1_1/">{{ goodobj.gtype.ttitle }}</a>
+		<span>></span>
+		商品详情
+        {% endif %}
+
+	</div>
+    {% endif %}
+
+	{% block content %}
+    {% endblock %}
+
+    {% block list_detail1 %}{% endblock %}
+
+   {% if recomment == 1 %}
+    <div class="main_wrap clearfix">
+        <div class="l_wrap fl clearfix">
+            <div class="new_goods">
+                <h3>新品推荐</h3>
+                <ul>
+                    {% for good in newgoods %}
+                        <li>
+                            <a href="/detail_{{ good.id }}/"><img src="/static/media/{{ good.gpic }}"></a>
+                            <h4><a href="/detail_{{ good.id }}/">{{ good.gtitle }}</a></h4>
+                            <div class="prize">￥ {{ good.gprice }}</div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% block list_detail2 %}{% endblock %}
+    </div>
+    {% endif %}
+
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">关于我们</a>
+			<span>|</span>
+			<a href="#">联系我们</a>
+			<span>|</span>
+			<a href="#">招聘人才</a>
+			<span>|</span>
+			<a href="#">友情链接</a>
+		</div>
+		<p>CopyRight © 2019 上海天天生鲜信息技术有限公司 All Rights Reserved</p>
+		<p>电话：021-****888    沪ICP备*******8号</p>
+	</div>
+{% block js2 %}{% endblock %}
+</body>
+</html>

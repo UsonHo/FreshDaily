@@ -1,0 +1,41 @@
+<div class="header_con">
+    <div class="header">
+        <div class="welcome fl">欢迎来到天天生鲜!</div>
+        <div class="fr">
+            {% if request.session.username|default:'' != '' %} {# 如果用户名不为空，往下执行 #}
+            <div class="login_info fl">
+                欢迎您：<em>{{ request.session.username }}</em>
+                <span>|</span>
+                <a onclick="return logOut();" href="/user/logout/">退出</a>
+{#                <a class="logout" href="javascript:;">退出</a>#}
+            </div>
+            {% else %}
+            <div class="login_btn fl">
+                <a href="/user/login/?next={{ request.path_info }}">登录</a>
+                <span>|</span>
+                <a href="/user/register/">注册</a>
+            </div>
+            {% endif %}
+
+            <div class="user_link fl">
+                <span>|</span>
+                <a href="{% url 'user:uinfo' %}">用户中心</a>
+                <span>|</span>
+                <a href="{% url 'cart:cart' %}">我的购物车</a>
+                <span>|</span>
+                <a href="{% url 'user:uinfo_order' %}">我的订单</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% comment %}
+$('.logout').click(function () {
+    console.log(123);
+    $.get('/user/logout/', function (data) {
+       if(data.status){
+           location.reload();
+       }
+       return false;
+    });
+})
+{% endcomment %}

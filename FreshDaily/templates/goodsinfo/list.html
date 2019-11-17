@@ -1,0 +1,56 @@
+{% extends 'goodsinfo/base.html' %}
+
+{% block list_detail2 %}
+<div class="r_wrap fr clearfix">
+    <div class="sort_bar">
+        <a href="/list{{ tid }}_1_1/"
+           {% if oid == '1' %}
+           class="active"
+           {% endif %}
+            >默认</a>
+        <a href="/list{{ tid }}_1_2/"
+           {% if oid == '2' %}
+           class="active"
+           {% endif %}
+            >价格</a>
+        <a href="/list{{ tid }}_1_3/"
+            {% if oid == '3' %}
+           class="active"
+           {% endif %}
+            >人气</a>
+    </div>
+
+    <ul class="goods_type_list clearfix">
+        {% for good in pageobjs %}
+        <li>
+            <a href="/detail_{{ good.id }}/"><img src="/static/media/{{ good.gpic }}"></a>
+            <h4><a href="/detail_{{ good.id }}/">{{ good.gtitle }}</a></h4>
+            <div class="operate">
+                <span class="prize">￥{{ good.gprice }}</span>
+                <span class="unit">{{ good.gprice }}/{{ good.gunit }}</span>
+                <a href="/cart/add_{{ good.id }}_1/" class="add_goods" title="加入购物车"></a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div class="pagenation">
+        {% if pageobjs.has_previous %}
+            <a href="/list{{ tid }}_{{ pageobjs.previous_page_number }}_{{ oid }}">上一页&lt;</a>
+        {% endif %}
+        {% for pindex in pageobjs.paginator.page_range %}
+            {% if pindex == pageobjs.number %}
+                <a href="/list{{ tid }}_{{ pindex }}_{{ oid }}/" class="active">{{ pindex }}</a>
+            {% else %}
+                <a href="/list{{ tid }}_{{ pindex }}_{{ oid }}/">{{ pindex }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if pageobjs.has_next %}
+            <a href="/list{{ tid }}_{{ pageobjs.next_page_number }}_{{ oid }}">下一页&gt;</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+{% endblock %}

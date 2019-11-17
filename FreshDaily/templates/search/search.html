@@ -1,0 +1,63 @@
+{% extends 'goodsinfo/base.html' %}
+{% block css %}
+    <style>
+    .main_wrap .fr{
+        float: left;
+    }
+    .main_wrap{
+        width: 1176px;
+    }
+    .r_wrap{
+        width: 1176px;
+    }
+
+    /*附加，查询结果居中显示*/
+    .goods_type_list{
+        text-align: center;
+    }
+    .goods_type_list li{
+        display: inline-block;
+        float: inherit;
+    }
+    </style>
+{% endblock %}
+{% block list_detail2 %}
+{% endblock %}
+
+{% block content %}
+{% if query %}
+<div class="main_wrap clearfix">
+    <div class="r_wrap fr clearfix">
+        <ul class="goods_type_list clearfix">
+            {% for item in page %}  <!-- for item in pageobject_list -->
+            <li>
+                <a href="/detail_{{ item.object.id }}/"><img src="/static/media/{{ item.object.gpic }}"></a>
+                <h4><a href="/detail_{{ item.object.id }}/">{{ item.object.gtitle }}</a></h4>
+                <div class="operate">
+                    <span class="prize">￥{{ item.object.gprice }}</span>
+                    <span class="unit">{{ item.object.gprice }}/{{ item.object.gunit }}</span>
+                    <a href="/cart/add_{{ item.object.id }}_1/" class="add_goods" title="加入购物车"></a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div class="pagenation">
+            {% if page.has_previous %}
+                <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">&laquo; 上一页&lt;</a>
+            {% endif %}
+            {% for pindex in page.paginator.page_range %}
+                {% if pindex == page.number %}
+                    <a href="?q={{ query }}&amp;page={{ pindex }}" class="active">{{ pindex }}</a>
+                {% else %}
+                    <a href="?q={{ query }}&amp;page={{ pindex }}">{{ pindex }}</a>
+                {% endif %}
+            {% endfor %}
+            {% if page.has_next %}
+                <a href="?q={{ query }}&amp;page={{ page.next_page_number }}">下一页 &raquo;</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,204 @@
+{% extends 'goodsinfo/base.html' %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="/static/css/modal.css">
+{% endblock %}
+{% block js %}
+    <script src="/static/js/jquery-1.12.4.min.js"></script>
+{% endblock %}
+
+	{% block content %}
+	<div class="total_count">全部商品<em>{{ cartobj_list|length }}</em>件</div>
+	<ul class="cart_list_th clearfix">
+		<li class="col01">商品名称</li>
+		<li class="col02">商品单位</li>
+		<li class="col03">商品价格</li>
+		<li class="col04">数量</li>
+		<li class="col05">小计</li>
+		<li class="col06">操作</li>
+	</ul>
+
+    {% for cartobj in cartobj_list %}
+	<ul class="cart_list_td clearfix" cartid="{{ cartobj.id }}">
+		<li class="col01"><input type="checkbox" name="purch" checked></li>
+		<li class="col02"><img src="/static/media/{{ cartobj.good.gpic }}"></li>
+		<li class="col03">{{ cartobj.good.gtitle }}<br><em>{{ cartobj.good.gprice }}元/{{ cartobj.good.gunit }}</em></li>
+		<li class="col04">{{ cartobj.good.gunit }}</li>
+		<li class="col05 gprice">{{ cartobj.good.gprice }}<span>元</span></li>
+		<li class="col06">
+			<div class="num_add" gid='{{ cartobj.good_id }}'>
+				<a href="javascript:;" class="add fl">+</a>
+				<input type="text" class="num_show fl" value="{{ cartobj.count }}">
+				<a href="javascript:;" class="minus fl">-</a>	
+			</div>
+		</li>
+		<li class="col07 totalPrice">{% widthratio cartobj.good.gprice 1 cartobj.count as total %}{{ total|floatformat:'2' }}<span>元</span></li>
+		<li class="col08"><a class="del" href="/cart/del_{{ cartobj.good_id }}_{{ cartobj.count }}">删除</a></li>
+	</ul>
+    {% endfor %}
+
+	<ul class="settlements">
+		<li class="col01"><input type="checkbox" id="check_all" checked></li>
+		<li class="col02">全选</li>
+		<li class="col03">合计(不含运费)：<span>¥</span><em class="total"></em><br>共计<b>{{ cartobj_list|length }}</b>件商品</li>
+		{% comment %} 需要根据选中的商品进行结算，并修改代码
+        <li class="col04"><a href="{% url 'cart:post_order' %}">去结算</a></li>
+        {% endcomment %}
+        <li class="col04"><a id="account" href="{% url 'order:order' %}?">去结算</a></li>
+	</ul>
+
+    {# 遮罩层 #}
+    <div class="pop">
+        <div class="modal" id="new">
+            <div class="con"></div>
+            <button class="confirm">确定</button>
+        </div>
+        <div class="mask"></div>
+    </div>
+
+    {% endblock %}
+{% block js2 %}
+    <script>
+    $(function () {
+        var isclick = true;
+       $('.add').click(function () {
+           if(isclick){
+               isclick = false;
+               var $count = $(this).next();
+               $count.val(parseInt($count.val()) + 1);
+               $count.blur();
+               setTimeout(function () {
+                   isclick = true;
+               }, 400);
+           }else{
+               // alert('您点击的太暴力啦');
+           }
+       });
+       $('.minus').click(function () {
+           if(isclick){
+               isclick = false;
+               var $count = $(this).prev();
+               if($count.val() <= 1){
+                   $('#new').removeClass('modal').addClass('new').children(':first').text('到底啦').end().parent().show();
+                   $('.confirm').hide();
+                   var ser = setTimeout(function (args) {
+                       $('.pop').hide();
+                       $('#new').addClass('modal').removeClass('new');
+                       $('.confirm').show();
+                       clearTimeout(ser);
+                   }, 500);
+                   $count.val(1);
+               }else{
+                   $count.val(parseInt($count.val()) - 1);
+               }
+               $count.blur();
+               setTimeout(function () {
+                   isclick = true;
+               }, 400);
+           }else{
+               // alert('您点击的太暴力啦');
+           }
+       });
+
+       $('.num_show').blur(function () {
+           var value = $(this).val();
+           console.log("value:", value);
+           if(value <= 0) {
+               $('.modal').children(':first').text('该宝贝不能再少了呦！').end().parent().show();
+               $(this).val(1);
+               return;
+           }else if(value > 1000) {
+               $('.modal').children(':first').text('该宝贝数量有点多呦').end().parent().show();
+               $(this).val(1000);
+               return;
+           }
+           var num = parseInt($(this).val());
+           $(this).val(num);
+
+           var price = $(this).parent().parent().prev().text();
+           $(this).parent().parent().next().text((num * parseFloat(price)).toFixed(2) + '元');
+
+           calc();
+
+           // 将数量写入数据库
+           var gid = $(this).parent().attr('gid');
+           $.get('/cart/?count='+num+'&gid='+gid, function (data) {});
+       });
+
+       calc();
+       function calc() {
+           var total = 0;
+           var count = 0;
+           $('.totalPrice').each(function () {
+               var state = $(this).parent().find(':checkbox').prop('checked');
+               console.log(state);
+               if(state){
+                   var per_total = parseFloat($(this).text());
+                   total = total + per_total;
+                   count += 1;
+               }
+           });
+           $('.total').text(total.toFixed(2)).parent().children(':last').text(count);
+       }
+
+       // 全选、取消
+       $('#check_all').click(function () {
+           var state = $(this).prop('checked');
+           $(':checkbox:not(#check_all)').prop('checked', state);
+       });
+       // 单选
+       $(':checkbox:not(#check_all)').click(function () {
+           // 如果当前商品被选中，判断其他所有商品是否均处于选中状态，如果是，则把全选勾上，否则把全选取消
+           var state = $(this).prop('checked');
+           if(state){
+               if($(':checked').length+1 == $(':checkbox').length){
+                   $('#check_all').prop('checked', true);
+               }else{
+                   $('#check_all').prop('checked', false);
+               }
+           }else{
+               $('#check_all').prop('checked', false);
+           }
+
+           // 仅对当前选中的商品进行价格计算
+           calc();
+       });
+
+       // 弹窗
+       $('.confirm').click(function () {
+           $('.pop').hide();
+       });
+
+        // 删除操作
+        $('.del').click(function () {
+            var del = confirm('真的不要我了吗？');
+            if(del){
+                var $cur_ul = $(this).parents('ul');
+                var cart_id = $cur_ul.attr('cartid');
+                console.log(cart_id);
+                $.get('/cart/delete_'+cart_id+'/', function (data) {
+                    console.log(data);
+                    if(data.status){
+                        $cur_ul.remove();
+                        var $totalCountTag = $('.total_count').children(':first');
+                        $totalCountTag.text($totalCountTag.text() - 1);
+                        calc();
+                    }
+                });
+            }
+            return false;
+        });
+
+        // 结算
+        $('#account').click(function () {
+            url = $(this).attr('href');
+            // console.log(url);
+            $(':checked:not(#check_all)').each(function () {
+                var c_id = 'cid=' + $(this).parent().parent().attr('cartid');
+                url = url + c_id + '&';
+            });
+            // console.log(url);
+            $(this).attr('href', url.slice(0, url.length-1));
+        });
+    });
+    </script>
+{% endblock %}

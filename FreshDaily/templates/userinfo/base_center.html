@@ -1,0 +1,75 @@
+{% extends 'userinfo/base_foot.html' %}
+
+    {% block css %}{% endblock %}
+    {% block js2 %}
+    <script type="text/javascript">
+        $(function () {
+            var path = '{{ request.path_info }}';
+            console.log(path);
+            $('.person').each(function () {
+                var tag = $(this).children(':first')[0].href; // jQuery对象
+                var subtag = tag.split('//')[1];
+                var index = subtag.indexOf('/');
+                var path2 = subtag.substring(index);
+                if(path2 == path){
+                    $(this).children(':first').addClass('active');
+                    $(this).siblings().each(function () {
+                        $(this).children(':first').removeClass('active');
+                    });
+                }
+            });
+        });
+    </script>
+    {% endblock %}
+    {% block js %}{% endblock %}
+{% block content %}
+    {% include 'include/public.html' %}
+
+    {% comment %}
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到天天生鲜!</div>
+			<div class="fr">
+				<div class="login_info fl">
+					欢迎您：<em>张 山</em>
+				</div>
+				<div class="login_btn fl">
+					<a href="/user/login">登录</a>
+					<span>|</span>
+					<a href="/user/register/">注册</a>
+				</div>
+				<div class="user_link fl">
+					<span>|</span>
+					<a href="user_center_info.html">用户中心</a>
+					<span>|</span>
+					<a href="cart.html">我的购物车</a>
+					<span>|</span>
+					<a href="user_center_order.html">我的订单</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endcomment %}
+
+	<div class="search_bar clearfix">
+		<a href="/" class="logo fl"><img src="/static/images/logo.png"></a>
+		<div class="sub_page_name fl">| 用户中心</div>
+		<div class="search_con fr">
+			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
+			<input type="button" class="input_btn fr" name="" value="搜索">
+		</div>
+	</div>
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+			<h3>用户中心</h3>
+			<ul>
+				<li class="person"><a href="/user/uinfo/" class="active">· 个人信息</a></li>
+				<li class="person"><a href="/user/uinfo_order/">· 全部订单</a></li>
+				<li class="person"><a href="/user/uinfo_site/">· 收货地址</a></li>
+			</ul>
+		</div>
+        {% block user_body %}
+        {% endblock %}
+	</div>
+{% endblock %}

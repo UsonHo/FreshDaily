@@ -1,0 +1,210 @@
+{% extends 'goodsinfo/base.html' %}
+
+{% block js %}
+    <script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/static/js/slide.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="center_con clearfix">
+		<ul class="subnav fl">
+			<li><a href="/list1_1_1/" class="fruit">新鲜水果</a></li>
+			<li><a href="/list2_1_1/" class="seafood">海鲜水产</a></li>
+			<li><a href="/list3_1_1/" class="meet">猪牛羊肉</a></li>
+			<li><a href="/list4_1_1/" class="egg">禽类蛋品</a></li>
+			<li><a href="/list5_1_1/" class="vegetables">新鲜蔬菜</a></li>
+			<li><a href="/list6_1_1/" class="ice">速冻食品</a></li>
+		</ul>
+		<div class="slide fl">
+			<ul class="slide_pics">
+				<li><img src="/static/images/slide.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide02.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide03.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide04.jpg" alt="幻灯片"></li>
+			</ul>
+			<div class="prev"></div>
+			<div class="next"></div>
+			<ul class="points"></ul>
+		</div>
+		<div class="adv fl">
+			<a href="#"><img src="/static/images/adv01.jpg"></a>
+			<a href="#"><img src="/static/images/adv02.jpg"></a>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model01">新鲜水果</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+                {% for good in type00 %}
+                    <a href="/detail_{{ good.id }}/" target="_blank">{{ good.gtitle|slice:'10' }}</a>
+                {% endfor %}
+			</div>
+			<a href="/list1_1_1" class="goods_more fr" id="fruit_more">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner01.jpg"></div>
+			<ul class="goods_list fl">
+                {% for good in type0 %}
+                    <li>
+                        <h4><a href="/detail_{{ good.id }}/">{{ good.gtitle|slice:'10' }}</a></h4>
+                        <a href="/detail_{{ good.id }}/"><img src="/static/media/{{ good.gpic }}" ></a>
+                        <div class="prize">¥ {{ good.gprice }}</div>
+                    </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model02">海鲜水产</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+                {% for good in type11 %}
+                    <a href="/detail_{{ good.id }}/" target="_blank">{{ good.gtitle|slice:'10' }}</a>
+                {% endfor %}
+			</div>
+			<a href="/list2_1_1" class="goods_more fr">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner02.jpg"></div>
+			<ul class="goods_list fl">
+                {% for good in type1 %}
+                    <li>
+                        <h4><a href="/detail_{{ good.id }}/">{{ good.gtitle|slice:'10' }}</a></h4>
+                        <a href="/detail_{{ good.id }}/"><img src="/static/media/{{ good.gpic }}" ></a>
+                        <div class="prize">¥ {{ good.gprice }}</div>
+                    </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model03">猪牛羊肉</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+                {% for good in type22 %}
+                    <a href="/detail_{{ good.id }}/" target="_blank">{{ good.gtitle|slice:'10' }}</a>
+                {% endfor %}
+			</div>
+			<a href="/list3_1_1" class="goods_more fr">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner03.jpg"></div>
+			<ul class="goods_list fl">
+                {% for good in type2 %}
+                    <li>
+                        <h4><a href="/detail_{{ good.id }}/">{{ good.gtitle|slice:'10' }}</a></h4>
+                        <a href="/detail_{{ good.id }}/"><img src="/static/media/{{ good.gpic }}" ></a>
+                        <div class="prize">¥ {{ good.gprice }}</div>
+                    </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model04">禽类蛋品</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+                {% for good in type33 %}
+                    <a href="/detail_{{ good.id }}/" target="_blank">{{ good.gtitle|slice:'10' }}</a>
+                {% endfor %}
+			</div>
+			<a href="/list4_1_1" class="goods_more fr">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner04.jpg"></div>
+			<ul class="goods_list fl">
+                {% for good in type3 %}
+                    <li>
+                        <h4><a href="/detail_{{ good.id }}/">{{ good.gtitle|slice:'10' }}</a></h4>
+                        <a href="/detail_{{ good.id }}/"><img src="/static/media/{{ good.gpic }}" ></a>
+                        <div class="prize">¥ {{ good.gprice }}</div>
+                    </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model05">新鲜蔬菜</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+                {% for good in type44 %}
+                    <a href="/detail_{{ good.id }}/" target="_blank">{{ good.gtitle|slice:'10' }}</a>
+                {% endfor %}
+			</div>
+			<a href="/list5_1_1" class="goods_more fr">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner05.jpg"></div>
+			<ul class="goods_list fl">
+                {% for good in type4 %}
+                    <li>
+                        <h4><a href="/detail_{{ good.id }}/">{{ good.gtitle|slice:'10' }}</a></h4>
+                        <a href="/detail_{{ good.id }}/"><img src="/static/media/{{ good.gpic }}" ></a>
+                        <div class="prize">¥ {{ good.gprice }}</div>
+                    </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model06">速冻食品</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+                {% for good in type55 %}
+                    <a href="/detail_{{ good.id }}/" target="_blank">{{ good.gtitle|slice:'10' }}</a>
+                {% endfor %}
+			</div>
+			<a href="/list6_1_1" class="goods_more fr">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner06.jpg"></div>
+			<ul class="goods_list fl">
+                {% for good in type5 %}
+                    <li>
+                        <h4><a href="/detail_{{ good.id }}/">{{ good.gtitle|slice:'10' }}</a></h4>
+                        <a href="/detail_{{ good.id }}/"><img src="/static/media/{{ good.gpic }}" ></a>
+                        <div class="prize">¥ {{ good.gprice }}</div>
+                    </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+{% endblock %}
+
+{% comment %}
+	<script type="text/javascript">
+		BCSlideshow('focuspic');
+		var oFruit = document.getElementById('fruit_more');
+		var oShownum = document.getElementById('show_count');
+
+		var hasorder = localStorage.getItem('order_finish');
+
+		if(hasorder)
+		{
+			oShownum.innerHTML = '2';
+		}
+
+		oFruit.onclick = function(){
+			window.location.href = 'list.html';
+		}
+	</script>
+{% endcomment %}

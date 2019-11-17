@@ -1,0 +1,38 @@
+.pop{
+    display: none;
+}
+.mask{
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    opacity: 0.25;
+}
+.modal, .new{
+    width: 240px;
+    height: 80px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    background-color: #fff;
+    margin-top: -160px;
+    margin-left: -120px;
+
+    text-align: center;
+    font: 16px/50px 'Mcrosoft Yahei';
+    color: darkgreen;
+    z-index: 1000;
+}
+.new{
+    width: 100px;
+    height: 40px;
+    margin-top: -60px;
+    margin-left: -30px;
+    font: 14px/40px 'Mcrosoft Yahei';
+}
+.confirm{
+    font-size: 14px;
+    text-align: center;
+}
